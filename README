@@ -1,0 +1,13 @@
+Before using, please edit jfrogclifh.rb and enter the right credential and url of your site.
+Example:
+user = 'name_of_user_who_has_the_right_to_write'
+pass = 'password'
+url = 'https://test.artifactoryonline.com/test'
+
+Examples how to use it:
+jfrogclifh.rb -mode repo -oper create -repname test-test
+jfrogclifh.rb -mode repo -oper list
+
+jfrogclifh.rb -mode file -oper upload -repnamee test-test -rfile VirtualBox2.xml -lfile VirtualBox.xml
+jfrogclifh.rb -mode file -oper download -repname test-test -rfile VirtualBox2.xml -lfile test_down.xml
+jfrogclifh.rb -mode file -oper delete -repname test-test -rfile VirtualBox2.xml
