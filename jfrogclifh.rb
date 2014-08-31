@@ -56,31 +56,30 @@ case mode
       usage
     end
   when "file"
-	debug("File")
-	oper = search_parameter("-oper")
-	case oper
-          when "upload"
-	    reponam = search_parameter("-repname")
-	    rfile = search_parameter("-rfile")
-	    lfile = search_parameter("-lfile")
-	    connection["#{url}/#{reponam}/#{rfile}"].put File.read("#{lfile}"),  :content_type => "application/xml"
-	  when "delete"
-	    reponam = search_parameter("-repname")
-	    rfile = search_parameter("-rfile")
-	    connection["#{url}/#{reponam}/#{rfile}"].delete
-	  when "download"
-	    reponam = search_parameter("-repname")
-	    rfile = search_parameter("-rfile")
-	    lfile = search_parameter("-lfile")
-            olfile = File.open(lfile, "w")
-	    olfile << connection["#{url}/#{reponam}/#{rfile}"].get
-	    olfile.close
-	  else
-	    puts " Enter the correct operation: -oper upload|delete|download "
-	    usage
-	end
+    debug("File")
+    oper = search_parameter("-oper")
+    case oper
+      when "upload"
+        reponam = search_parameter("-repname")
+        rfile = search_parameter("-rfile")
+        lfile = search_parameter("-lfile")
+        connection["#{url}/#{reponam}/#{rfile}"].put File.read("#{lfile}"),  :content_type => "application/xml"
+      when "delete"
+        reponam = search_parameter("-repname")
+        rfile = search_parameter("-rfile")
+        connection["#{url}/#{reponam}/#{rfile}"].delete
+      when "download"
+        reponam = search_parameter("-repname")
+        rfile = search_parameter("-rfile")
+        lfile = search_parameter("-lfile")
+        olfile = File.open(lfile, "w")
+        olfile << connection["#{url}/#{reponam}/#{rfile}"].get
+        olfile.close
+      else
+        puts " Enter the correct operation: -oper upload|delete|download "
+        usage
+      end
   else
     puts " Enter the correct mode: -mode repo|file"
     usage
 end
-
