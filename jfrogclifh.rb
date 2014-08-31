@@ -13,6 +13,8 @@ DEBUG = false
 def debug(s)
   puts s if DEBUG
 end
+    
+connection  = RestClient::Resource.new(url, :user => user, :password => pass)  
 
 def usage
   puts "usage: #{$0} -mode repo|file "
@@ -27,7 +29,7 @@ end
 
 def search_parameter(param)
   ARGV.each_index { |i| return ARGV[i+1] if ARGV[i] == param }
-  puts "Error: there is not the parameter: #{param} \n"
+  puts "Error: there is not the parameter: #{param}"
   usage
   return exit(1)
 end
@@ -42,15 +44,13 @@ case mode
     debug(oper)
     case oper
       when "list"
-        conn = RestClient::Resource.new "#{url}/api/repositories"
-        repos = JSON.parse(conn.get)
-        repos.each { |re| print "repo #{re["key"]} type #{re["type"]} URL #{re["url"]}  \n" }
+        repos = JSON.parse(connection['/api/repositories'].get)
+        repos.each { |re| puts "repo #{re["key"]} type #{re["type"]} URL #{re["url"]}" }
       when "create"
         reponam = search_parameter("-repname")
         debug("Reponame #{reponam}")
         config = {"key"=>"#{reponam}", "description"=>"Test repository for in-house libraries", "notes"=>"", "includesPattern"=>"**/*", "excludesPattern"=>"", "repoLayoutRef"=>"maven-2-default", "enableNuGetSupport"=>false, "enableGemsSupport"=>false, "checksumPolicyType"=>"client-checksums", "handleReleases"=>true, "handleSnapshots"=>false, "maxUniqueSnapshots"=>0, "snapshotVersionBehavior"=>"unique", "suppressPomConsistencyChecks"=>false, "blackedOut"=>false, "propertySets"=>["artifactory"], "archiveBrowsingEnabled"=>false, "calculateYumMetadata"=>false, "yumRootDepth"=>0, "rclass"=>"local"}
-        conn = RestClient::Resource.new "#{url}/api/repositories/#{reponam}", "#{user}", "#{pass}"
-        conn.put JSON.generate(config) , :content_type => 'application/json'
+        connection["/api/repositories/#{reponam}"].put JSON.generate(config) , :content_type => 'application/json'
     else
       puts " Enter the correct operation: -oper list|create "
       usage
@@ -63,20 +63,17 @@ case mode
 	    reponam = search_parameter("-repname")
 	    rfile = search_parameter("-rfile")
 	    lfile = search_parameter("-lfile")
-	    conn = RestClient::Resource.new "#{url}/#{reponam}/#{rfile}", "#{user}", "#{pass}"
-	    conn.put File.read("#{lfile}"),  :content_type => "application/xml"
+	    connection["#{url}/#{reponam}/#{rfile}"].put File.read("#{lfile}"),  :content_type => "application/xml"
 	  when "delete"
 	    reponam = search_parameter("-repname")
 	    rfile = search_parameter("-rfile")
-	    conn = RestClient::Resource.new "#{url}/#{reponam}/#{rfile}", "#{user}", "#{pass}"
-	    conn.delete
+	    connection["#{url}/#{reponam}/#{rfile}"].delete
 	  when "download"
 	    reponam = search_parameter("-repname")
 	    rfile = search_parameter("-rfile")
 	    lfile = search_parameter("-lfile")
             olfile = File.open(lfile, "w")
-	    conn = RestClient::Resource.new "#{url}/#{reponam}/#{rfile}", "#{user}", "#{pass}"
-	    olfile << conn.get
+	    olfile << connection["#{url}/#{reponam}/#{rfile}"].get
 	    olfile.close
 	  else
 	    puts " Enter the correct operation: -oper upload|delete|download "
