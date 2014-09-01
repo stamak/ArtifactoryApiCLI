@@ -13,8 +13,10 @@ DEBUG = false
 def debug(s)
   puts s if DEBUG
 end
+ 
+class ArtifactoryRest < RestClient::Resource; end
     
-connection  = RestClient::Resource.new(url, :user => user, :password => pass)  
+connection  = ArtifactoryRest.new(url, :user => user, :password => pass)  
 
 def usage
   puts "usage: #{$0} -mode repo|file "
