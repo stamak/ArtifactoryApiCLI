@@ -60,19 +60,15 @@ case mode
   when "file"
     debug("File")
     oper = search_parameter("-oper")
+    reponam = search_parameter("-repname")
+    rfile = search_parameter("-rfile")
     case oper
       when "upload"
-        reponam = search_parameter("-repname")
-        rfile = search_parameter("-rfile")
         lfile = search_parameter("-lfile")
         connection["#{url}/#{reponam}/#{rfile}"].put File.read("#{lfile}"),  :content_type => "application/xml"
       when "delete"
-        reponam = search_parameter("-repname")
-        rfile = search_parameter("-rfile")
         connection["#{url}/#{reponam}/#{rfile}"].delete
       when "download"
-        reponam = search_parameter("-repname")
-        rfile = search_parameter("-rfile")
         lfile = search_parameter("-lfile")
         olfile = File.open(lfile, "w")
         olfile << connection["#{url}/#{reponam}/#{rfile}"].get
