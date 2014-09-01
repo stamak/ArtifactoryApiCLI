@@ -47,7 +47,8 @@ case mode
     case oper
       when "list"
         repos = JSON.parse(connection['/api/repositories'].get)
-        repos.each { |re| puts "repo #{re["key"]} type #{re["type"]} URL #{re["url"]}" }
+        print_repo_list = lambda { |re| puts "repo #{re["key"]} type #{re["type"]} URL #{re["url"]}" }
+        repos.each(&print_repo_list)
       when "create"
         reponam = search_parameter("-repname")
         debug("Reponame #{reponam}")
