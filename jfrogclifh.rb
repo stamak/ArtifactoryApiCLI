@@ -53,9 +53,6 @@ case mode
         debug("Reponame #{reponam}")
         config = {"key"=>"#{reponam}", "description"=>"Test repository for in-house libraries", "notes"=>"", "includesPattern"=>"**/*", "excludesPattern"=>"", "repoLayoutRef"=>"maven-2-default", "enableNuGetSupport"=>false, "enableGemsSupport"=>false, "checksumPolicyType"=>"client-checksums", "handleReleases"=>true, "handleSnapshots"=>false, "maxUniqueSnapshots"=>0, "snapshotVersionBehavior"=>"unique", "suppressPomConsistencyChecks"=>false, "blackedOut"=>false, "propertySets"=>["artifactory"], "archiveBrowsingEnabled"=>false, "calculateYumMetadata"=>false, "yumRootDepth"=>0, "rclass"=>"local"}
         connection["/api/repositories/#{reponam}"].put JSON.generate(config) , :content_type => 'application/json'
-    else
-      puts " Enter the correct operation: -oper list|create "
-      usage
     end
   when "file"
     debug("File")
@@ -73,11 +70,5 @@ case mode
         olfile = File.open(lfile, "w")
         olfile << connection["#{url}/#{reponam}/#{rfile}"].get
         olfile.close
-      else
-        puts " Enter the correct operation: -oper upload|delete|download "
-        usage
       end
-  else
-    puts " Enter the correct mode: -mode repo|file"
-    usage
 end
