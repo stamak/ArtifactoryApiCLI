@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #This script was written by Stas Makar <stamak@rambler.ru>
-#If you have any questions, feel free to ask. 
+#If you have any questions, feel free to ask.
 require 'rest-client'
 require 'json'
 
@@ -13,10 +13,10 @@ DEBUG = false
 def debug(s)
   puts s if DEBUG
 end
- 
+
 class ArtifactoryRest < RestClient::Resource; end
-    
-connection  = ArtifactoryRest.new(url, :user => user, :password => pass)  
+
+connection  = ArtifactoryRest.new(url, :user => user, :password => pass)
 
 def usage
   puts "usage: #{$0} -mode repo|file "
